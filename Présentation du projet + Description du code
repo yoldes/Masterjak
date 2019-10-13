@@ -1,0 +1,26 @@
+Jeu utilisant le principe du mastermind. Vous y jouerez contre une IA. 
+Trois modes de difficulté seront disponibles. Vous aurez également la possibilité de sauvegarder votre partie en cours. 
+L’interface est constituée de 13 boutons et de 100 LEDs. 
+Il permet à des personnes de tous âges de profiter du jeu Mastermind. 
+Il est adapté à toutes difficultés, résistants aux chocs et simple d’utilisation.
+Mon code fait environ 500 lignes. 
+Pour codé mon mastermind, j’ai d’abord commencé par associer chaque bouton à une couleur. 
+(Fonctions Red(), Green(), Blue(), Orange(), Violet(), Yellow(). ) Parallèlement, j’ai codé mon joystick pour que la position i de celui-ci parcourt le ruban tout en sachant que i est le numéro de la LED de 0 à 47). 
+Je suis revenue sur le code du joystick par la suite pour rajouter un paramétrage selon lequel lorsque l’on ne fait que passer sur une LED déjà allumée, elle reste de la couleur qu’elle avait avant.
+Ces deux morceaux de programme (couleurs + joystick) forment la fonction « Choiceled() ». 
+Après cela, je me suis occupée de la fonction code() , déterminant un code secret à quatrechiffres « aléatoirement ». Cette partie m’a donné du fil à retordre car la fonction aléatoire (Random()) d’arduino ne l’est pas réellement. 
+En effet cette fonction opère sur la base d’une seed que l’on peut modifier. 
+Il m’a donc fallu mettre la seed de cette fonction comme lecture d’un pin vide. 
+Ainsi, la fonction lit la tension d’entrée du pin vide qui elle est forcément aléatoire à tout instant. 
+Cette fonction fait appel aux arrays d’arduino que j’ai par la suite beaucoup utilisé. 
+La suite logique de cette fonction était de créer une matrice array_tentative[] qui récupérait l’information de la couleur que l’on rentrait dans chaque LED de la rangée de 4 sur laquelle on se trouve à cet instant. 
+J’ai donc ajouté aux fonctions couleurs quelques lignes de code qui demandent que lorsque l’on appuie sur un bouton de couleur, l’information « telle LED (numéro) reçoit telle couleur » se retrouve dans la matrice array_tentative[] sous forme d’un chiffre de 0 à 7(RVBOVJNBlN). 
+J’ai également créé la matrice array_couleurs[] qui contient les codes RGB associés à chacune de ces couleurs. 
+Ensuite, j’ai codé la vérification : le bouton « Start » permet de valider la tentative et calcule le nombre de couleurs bien placées et correctes pour allumer les LEDs de vérifications en fonction. 
+J’ai géré l’exception selon laquelle on ne peut pas valider si une LED est blanche ou éteinte. 
+Le joueur passe donc au rang suivant et peut continuer de jouer jusqu’à la condition d’arrêt qui est : 
+-Défaite : k (n° du rang allant de 0 à 48 de 4 en 4) a atteint 48 et la variable « bienplace » est différente de 4 : le code s’affiche sur le rang 52 (en haut à droite) 
+-Victoire : bienplace==4 : on déclenche la musique de victoire. 
+La dernière partie de mon programme est constituée de la fonction Rejouer() ; lorsque k==48, le bouton Start permet de relancer une partie avec un nouveau code. 
+J’ai réuni toutes les fonctions précédemment citées : Red(), Green(), Blue(), Orange(), Violet(), Yellow(), Choiceled(), Valid() dans une seule et même fonction nommée MasterJak(). 
+Ainsi dans mon loop() se trouvent MasterJak() et Rejouer() 
